@@ -1,0 +1,81 @@
+package RetoUnidad5;
+import java.io.*;
+import java.util.Scanner;
+
+public class Ejercicio2 {
+
+	public static void main(String[] args) {
+		// Obtener la ruta del directorio actual y mostrarla
+String DirectorioActual=System.getProperty("user.dir");
+System.out.println("Tu directorio actual es : " + DirectorioActual);
+
+// Crear un directorio llamado "dirEjer2" y ficheros
+
+String nombreDirectorio="dirEjer2";
+String nombreFichero1="uno.txt";
+String nombreFichero2="dos.txt";
+
+File directorio=new File(nombreDirectorio);
+File Fichero1=new File(directorio,nombreFichero1);
+File Fichero2=new File(directorio,nombreFichero2);
+
+// Comprobar si el directorio y los ficheros ya existen
+if(!directorio.exists()) {
+	directorio.mkdir();
+	System.out.println("Directorio creado " + directorio.getAbsolutePath());
+}else {
+	System.out.println("El directorio ya existe " + directorio.getAbsolutePath());
+
+}
+try {
+//Abrir el fichero "uno.txt" para escritura
+
+BufferedWriter writer=new BufferedWriter(new FileWriter (Fichero1,true));
+		
+		// c) Introducir nombres por teclado hasta que se ingrese "-"	
+
+introducirNombres(writer);
+
+writer.close();
+
+//Mostrar contenido del fichero "dos.txt"
+
+mostrarContenidoFichero(Fichero2);
+}catch(IOException e) {
+	System.err.println("Error" + e.getMessage());
+}
+
+	}
+
+	
+
+	private static void introducirNombres(BufferedWriter writer)throws IOException {
+		Scanner scanner=new Scanner(System.in);
+
+        System.out.println("Introduce nombres (para finalizar, ingresa '-'): ");
+        String nombres;
+        do {
+        	nombres=scanner.nextLine();
+        	if(!nombres.equals("-")) {
+                // Escribir el nombre en el fichero
+writer.write(nombres);
+writer.newLine();
+        	}
+        }while (!nombres.equals("-"));
+scanner.close();
+		
+	}
+	private static void mostrarContenidoFichero(File Fichero) {
+		try(BufferedReader reader=new BufferedReader(new FileReader (Fichero))){
+			System.out.println(" Contenido del fichero \" " + Fichero.getName() + " \":");
+			String linea;
+			while((linea=reader.readLine())!=null) {
+				System.out.println(linea);
+			}
+			}catch(IOException e) {
+				System.err.println("Error "+ e.getMessage());
+			}
+				
+		}
+	}
+
