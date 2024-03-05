@@ -1,0 +1,216 @@
+package RetoUnidad5;
+import java.io.*;
+import java.util.Scanner;
+
+public class Ejercicio1 {
+
+	public static void main(String[] args) {
+		Scanner scanner=new Scanner(System.in);
+        // Pedir al usuario los nombres de los ficheros
+	
+		String nombrearchivo1,nombrearchivo2;
+		
+		do {
+		
+		System.out.println("Escribe el nombre del primer archivo, minimo tres caracteres:");
+		nombrearchivo1=scanner.nextLine();
+		} while(nombrearchivo1.length()<3);
+		System.out.println("El nombre del primer archivo " + nombrearchivo1+ " es válido");
+
+		do {		
+		System.out.println("Escribe el nombre del segundo archivo, minimo tres caracteres:");
+		nombrearchivo2=scanner.nextLine();
+		} while(nombrearchivo2.length()<3);
+		System.out.println("El nombre del segundo archivo " + nombrearchivo2 + " es válido");
+		
+		// Obtener la ruta del directorio actual y mostrarla
+		
+		String directorioActual=System.getProperty("user.dir");
+			System.out.println("El directorio actual es "+ directorioActual);
+		
+		// Construir la ruta relativa a los ficheros y crearlos
+			
+			String rutaCompletaFich1=directorioActual+ File.separator + nombrearchivo1;
+			String rutaCompletaFich2=directorioActual+ File.separator + nombrearchivo2;
+			
+			if(comprobarExiste(rutaCompletaFich1)) {
+				
+				System.out.println("El fichero " + nombrearchivo1 + " ya existe en la ruta actual.No se puede crear");
+			}else {
+				crearFichero(rutaCompletaFich1);
+				System.out.println("El fichero " + nombrearchivo1 + " ha sido creado con exito");
+				
+		}
+			
+			if(comprobarExiste(rutaCompletaFich2)) {
+				System.out.println("El fichero " + nombrearchivo2 + " ya existe en la ruta actual.No se puede crear");
+			}else {
+				crearFichero(rutaCompletaFich2);
+				System.out.println("El fichero " + nombrearchivo2 + " ha sido creado con exito");
+			
+		}
+		
+			// Grabar datos en el primer fichero
+			
+			if(comprobarExiste(rutaCompletaFich1)) {
+				escribirEnFichero(rutaCompletaFich1);
+			}else {
+				
+				System.out.println("El fichero " + nombrearchivo1 + " no existe, no se pueden grabar datos");
+				
+			}
+			
+	        // Leer datos del primer fichero
+			
+			if(comprobarExiste(rutaCompletaFich1)) {
+				leerDeFichero(rutaCompletaFich1);
+			}else {
+				
+				System.out.println("El fichero " + nombrearchivo1 + " no existe, no se pueden leer datos");
+
+				
+			}
+	        // Mostrar propiedades del primer fichero
+			
+			if(comprobarExiste(rutaCompletaFich1)) {
+				mostrarPropiedadesFichero(rutaCompletaFich1);
+				
+			}else {
+				
+				System.out.println("El fichero " + nombrearchivo1 + " no existe, no se pueden mostrar propiedades");
+			}
+
+	        // Copiar contenido del primer fichero al segundo
+			
+			duplicarFicheros(rutaCompletaFich1,rutaCompletaFich2);
+			
+			// Borrar el primer fichero
+			
+            borrarFichero(rutaCompletaFich1);
+            
+           // Leer el segundo fichero para comprobar la copia
+            
+            if(comprobarExiste(rutaCompletaFich2)) {
+            	leerDeFichero(rutaCompletaFich2);
+            } else {
+				System.out.println("El fichero " + nombrearchivo2 + " no existe, no se pueden leer datos");
+				
+		        // Crear un directorio llamado "dirEjer1"
+
+             String nombreDirectorio=("dirEjer1");
+             String rutaCompletaDirectorio= directorioActual + File.separator + nombreDirectorio;
+             
+             if(comprobarExisteDirectorio(rutaCompletaDirectorio)) {
+ 				System.out.println("El directorio " + rutaCompletaDirectorio + " ya existe, no se puede crear");
+
+             }else {
+            	 crearDirectorio(rutaCompletaDirectorio);
+  				System.out.println("El directorio " + rutaCompletaDirectorio + " no existe, ha sido creado");
+
+             }
+             // Cerrar el scanner
+      scanner.close();
+      // Métodos auxiliares
+
+            }
+            
+            	
+		
+	}
+
+	private static boolean comprobarExiste(String rutaFichero) {
+    File Fichero=new File(rutaFichero);
+    return Fichero.exists();
+    }
+	private static boolean comprobarExisteDirectorio(String rutaDirectorio) {
+	File Directorio=new File(rutaDirectorio);
+	return Directorio.exists() && Directorio.isDirectory();
+	}
+	
+	private static void crearFichero(String rutaFichero) {
+	File Fichero=new File(rutaFichero);
+try {
+	Fichero.createNewFile();
+}catch(IOException e) {
+	e.printStackTrace();}
+}
+	private static void escribirEnFichero(String rutaFichero) {
+try (FileWriter fileWriter=new FileWriter(rutaFichero)){
+	for(int i=0;i<=10;i++) {
+		
+		fileWriter.write(String.valueOf(i) + System.lineSeparator());
+	}
+}catch(IOException e) {
+	e.printStackTrace();}
+	}
+
+	private static void leerDeFichero(String rutaFichero) {
+		try(BufferedReader bufferedReader=new BufferedReader(new FileReader(rutaFichero))){
+				System.out.println("Contenido del fichero:");
+				String linea;
+				while((linea=bufferedReader.readLine())!=null)
+	System.out.println(linea);
+				
+
+	
+}catch(IOException e) {
+	e.printStackTrace(); }
+	}
+
+
+private static void mostrarPropiedadesFichero(String rutaFichero) {
+File Fichero=new File(rutaFichero);
+if (Fichero.exists()) {
+System.out.println("Nombre del archivo: " + Fichero.getName());
+System.out.println("Ruta absoluta: " + Fichero.getAbsolutePath());
+System.out.println("Ruta del directorio padre: " + Fichero.getParent());
+System.out.println("Tamaño del fichero: " + Fichero.length() + " bytes");
+System.out.println("¿Es un fichero o un directorio? " + (Fichero.isFile() ? "Fichero" : "Directorio"));
+System.out.println("Permiso de lectura: " + Fichero.canRead());
+System.out.println("Permiso de escritura: " + Fichero.canWrite());
+System.out.println("Permiso de ejecución: " + Fichero.canExecute());
+System.out.println("¿Está oculto? " + Fichero.isHidden());
+} else {
+	System.out.println("El fichero no existe.");}
+}
+
+
+
+
+private static void duplicarFicheros(String rutaCompletaFich1, String rutaCompletaFich2) {
+	try (FileInputStream fis = new FileInputStream(rutaCompletaFich1);
+            FileOutputStream fos = new FileOutputStream(rutaCompletaFich2)) {
+           byte[] buffer = new byte[1024];
+           int bytesRead;
+           while ((bytesRead = fis.read(buffer)) != -1) {
+               fos.write(buffer, 0, bytesRead);
+           }
+       } catch (IOException e) {
+           e.printStackTrace();}
+       }
+	
+	private static void borrarFichero(String rutaCompletaFich1) {
+		File Fichero=new File(rutaCompletaFich1);
+		if(Fichero.exists()) {
+			Fichero.delete();
+			
+			System.out.println("Fichero borrado");
+		}else {
+            System.out.println("El fichero no existe.");}
+
+		}
+		
+
+		
+		private static void crearDirectorio(String rutaDirectorio) {
+			File directorio=new File(rutaDirectorio);
+			if(!directorio.exists()) {
+				directorio.mkdir();
+			}
+		}
+
+
+	}
+	
+
+   
