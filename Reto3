@@ -1,0 +1,42 @@
+import java.util.Scanner;
+import java.io.*;
+
+public class Ejercicio3 {
+
+	public static void main(String[] args) {
+introducirYAlmacenarNumeros();
+
+}
+
+	private static void introducirYAlmacenarNumeros() {
+try {Scanner scanner=new Scanner(System.in);
+DataOutputStream dataOutputStream=new DataOutputStream(new FileOutputStream("tres.dat"));
+
+System.out.println("Introduce números positivos. Introduce un número negativo para terminar");
+
+int numero;
+while ((numero = pedirNumero(scanner)) >= 0) {
+    escribirNumeroEnFichero(dataOutputStream, numero);
+}
+System.out.println("Fin de la introducción de datos");
+
+}catch(IOException e) {
+	
+	System.err.println("Error" + e.getMessage());
+
+}
+	}
+
+
+	private static int pedirNumero(Scanner scanner) {
+		
+		System.out.println("Introduce un numero:");
+		return scanner.nextInt();
+	}
+	
+
+	private static void escribirNumeroEnFichero(DataOutputStream dataOutputStream, int numero) throws IOException {
+dataOutputStream.writeInt(numero);		
+	}
+	
+}
